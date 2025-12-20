@@ -15,6 +15,12 @@ class NoteModel {
 
   NoteModel({this.id, this.title, this.content});
 
+  NoteModel.create({
+    required this.id,
+    required this.title,
+    required this.content,
+  });
+
   factory NoteModel.fromJson(Map<String, dynamic> json) {
     return _$NoteModelFromJson(json);
   }
