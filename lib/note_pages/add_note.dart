@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:note_app/data/data.dart';
+import 'package:note_app/data/note_model/note_model.dart';
 import 'package:note_app/utils/app_colors.dart';
 import 'package:note_app/utils/app_str.dart';
 
@@ -7,10 +9,12 @@ class AddEditNote extends StatefulWidget {
     super.key,
     required this.title,
     required this.description,
+    required this.id,
   });
 
   final String? title;
   final String? description;
+  final String? id;
 
   @override
   State<AddEditNote> createState() => _AddNoteState();
@@ -48,8 +52,9 @@ class _AddNoteState extends State<AddEditNote> {
         backgroundColor: AppColors.appThemeColor,
         actions: [
           IconButton(
-            onPressed: () {
+            onPressed: () async {
               //Save note action
+              saveNote();
             },
             icon: const Icon(Icons.save_as_outlined),
             color: Colors.white,
@@ -112,5 +117,21 @@ class _AddNoteState extends State<AddEditNote> {
         ),
       ),
     );
+  }
+
+  Future<void> saveNote() async {
+    final title = _titleController.text;
+    final description = _descriptionController.text;
+
+    final note = NoteModel.create(
+      id: DateTime.now().microsecondsSinceEpoch.toString(),
+      title: title,
+      content: description,
+    );
+    final result = await NoteDB().createNote(note);
+    if (result != null) {
+      if (!mounted) return;
+      Navigator.of(context).pop();
+    } else {}
   }
 }
