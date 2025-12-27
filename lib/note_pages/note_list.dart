@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:note_app/utils/app_colors.dart';
 
-class NoteList extends StatelessWidget {
+class NoteList extends StatefulWidget {
   const NoteList({super.key});
 
+  @override
+  State<NoteList> createState() => _NoteListState();
+}
+
+class _NoteListState extends State<NoteList> {
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
