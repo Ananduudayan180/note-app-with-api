@@ -15,7 +15,15 @@ class NoteDB implements ApiCalls {
   Dio dio = Dio();
   Url url = Url();
 
-  NoteDB() {
+  //singleTon
+  NoteDB._internal();
+  static final NoteDB _singleTon = NoteDB._internal();
+
+  factory NoteDB() {
+    return _singleTon;
+  }
+
+  NoteDB.d() {
     dio.options = BaseOptions(
       baseUrl: url.baseUrl,
       responseType: ResponseType.plain,
