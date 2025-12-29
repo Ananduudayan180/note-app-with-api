@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:note_app/data/get_all_notes_resp/get_all_notes_resp.dart';
 import 'package:note_app/data/note_model/note_model.dart';
 import 'package:note_app/data/url.dart';
@@ -12,6 +13,7 @@ abstract class ApiCalls {
 }
 
 class NoteDB implements ApiCalls {
+  ValueNotifier<List<NoteModel>> noteListNotifier = ValueNotifier([]);
   Dio dio = Dio();
   Url url = Url();
 
@@ -32,6 +34,7 @@ class NoteDB implements ApiCalls {
   Future<NoteModel?> createNote(NoteModel note) async {
     try {
       final response = await dio.post(url.createNote, data: note.toJson());
+      getAllNote();
       final result = await jsonDecode(response.data);
       return NoteModel.fromJson(result as Map<String, dynamic>);
     } on DioError catch (_) {
@@ -43,14 +46,16 @@ class NoteDB implements ApiCalls {
 
   @override
   Future<List<NoteModel>> getAllNote() async {
-    final response = await dio.get(url.baseUrl + url.getAllNote);
+    final response = await dio.get(url.getAllNote);
     if (response.data != null) {
       final result = await jsonDecode(response.data);
       final getAllNotes = GetAllNotesResp.fromJson(
         result as Map<String, dynamic>,
       );
+      noteListNotifier.value = getAllNotes.data;
       return getAllNotes.data;
     } else {
+      noteListNotifier.value.clear();
       return [];
     }
   }
