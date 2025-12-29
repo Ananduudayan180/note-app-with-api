@@ -4,14 +4,13 @@ import 'package:note_app/data/note_model/note_model.dart';
 import 'package:note_app/utils/app_colors.dart';
 
 class NoteList extends StatefulWidget {
-  final Function? refreshNotes;
-  const NoteList({super.key, this.refreshNotes});
+  const NoteList({super.key});
 
   @override
-  State<NoteList> createState() => _NoteListState();
+  State<NoteList> createState() => NoteListState();
 }
 
-class _NoteListState extends State<NoteList> {
+class NoteListState extends State<NoteList> {
   final List<NoteModel> notesList = [];
   @override
   void initState() {
@@ -20,11 +19,7 @@ class _NoteListState extends State<NoteList> {
   }
 
   Future<void> fetchNotes() async {
-    final notes = await NoteDB().getAllNote();
-    setState(() {
-      notesList.clear();
-      notesList.addAll(notes.reversed);
-    });
+    await NoteDB().getAllNote();
   }
 
   @override
