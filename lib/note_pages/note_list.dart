@@ -30,48 +30,56 @@ class _NoteListState extends State<NoteList> {
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
-    return ListView.builder(
-      itemBuilder: (context, index) {
-        final NoteModel note = notesList[index];
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          child: GestureDetector(
-            onTap: () {
-              // Handle note tap
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppColors.appContainerColor,
-                borderRadius: BorderRadius.circular(8),
+    return ValueListenableBuilder(
+      valueListenable: NoteDB().noteListNotifier,
+      builder: (BuildContext context, noteList, Widget? child) {
+        return ListView.builder(
+          itemBuilder: (context, index) {
+            final note = noteList[index];
+            return Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 8.0,
               ),
-              child: ListTile(
-                contentPadding: EdgeInsets.symmetric(
-                  horizontal: 12.0,
-                  vertical: 4.0,
-                ),
-                title: Text(
-                  note.title ?? 'No Title',
-                  style: textTheme.titleMedium,
-                ),
-                subtitle: Text(
-                  note.content ?? 'No Content',
-                  style: textTheme.bodyMedium,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                trailing: IconButton(
-                  onPressed: () {
-                    // Handle delete action
-                  },
-                  icon: Icon(Icons.delete),
-                  color: AppColors.appThemeColor,
+              child: GestureDetector(
+                onTap: () {
+                  // Handle note tap
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.appContainerColor,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: ListTile(
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 12.0,
+                      vertical: 4.0,
+                    ),
+                    title: Text(
+                      note.title ?? 'No Title',
+                      style: textTheme.titleMedium,
+                    ),
+                    subtitle: Text(
+                      note.content ?? 'No Content',
+                      style: textTheme.bodyMedium,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    trailing: IconButton(
+                      onPressed: () {
+                        // Handle delete action
+                      },
+                      icon: Icon(Icons.delete),
+                      color: AppColors.appThemeColor,
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
+            );
+          },
+          itemCount: noteList.length,
         );
       },
-      itemCount: notesList.length,
     );
   }
 }
