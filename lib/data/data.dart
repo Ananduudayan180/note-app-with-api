@@ -8,7 +8,7 @@ import 'package:note_app/data/url.dart';
 abstract class ApiCalls {
   Future<NoteModel?> createNote(NoteModel value);
   Future<List<NoteModel>> getAllNote();
-  // Future<NoteModel?> updateNote(NoteModel value);
+  Future<void> updateNote(NoteModel value);
   // Future<void> deleteNote(String id);
 }
 
@@ -58,5 +58,11 @@ class NoteDB implements ApiCalls {
       noteListNotifier.value.clear();
       return [];
     }
+  }
+
+  @override
+  Future<void> updateNote(NoteModel value) async {
+    final response = dio.put(url.updateNote, data: value.toJson());
+    getAllNote();
   }
 }

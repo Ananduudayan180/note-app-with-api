@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:note_app/data/data.dart';
 import 'package:note_app/data/note_model/note_model.dart';
+import 'package:note_app/note_pages/add_note.dart';
 import 'package:note_app/utils/app_colors.dart';
 
 class NoteList extends StatefulWidget {
@@ -36,9 +37,16 @@ class NoteListState extends State<NoteList> {
                 horizontal: 16.0,
                 vertical: 8.0,
               ),
+              //Edit note tap
               child: GestureDetector(
                 onTap: () {
-                  // Handle note tap
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return AddEditNote(noteModel: note);
+                      },
+                    ),
+                  );
                 },
                 child: Container(
                   decoration: BoxDecoration(

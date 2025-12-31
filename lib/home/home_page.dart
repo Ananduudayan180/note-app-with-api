@@ -17,13 +17,14 @@ class HomePage extends StatelessWidget {
       ),
       //Note list view
       body: NoteList(),
+      //fab
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (ctx) {
-                return AddEditNote(title: null, description: null);
+                return AddEditNote(noteModel: null);
               },
             ),
           );

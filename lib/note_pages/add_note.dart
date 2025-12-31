@@ -5,16 +5,9 @@ import 'package:note_app/utils/app_colors.dart';
 import 'package:note_app/utils/app_str.dart';
 
 class AddEditNote extends StatefulWidget {
-  const AddEditNote({
-    super.key,
-    required this.title,
-    required this.description,
-    required this.id,
-  });
+  const AddEditNote({super.key, required this.noteModel});
 
-  final String? title;
-  final String? description;
-  final String? id;
+  final NoteModel? noteModel;
 
   @override
   State<AddEditNote> createState() => _AddNoteState();
@@ -25,11 +18,11 @@ class _AddNoteState extends State<AddEditNote> {
   final TextEditingController _descriptionController = TextEditingController();
   @override
   void initState() {
-    if (widget.title != null || widget.description != null) {
-      _titleController.text = widget.title ?? '';
-      _descriptionController.text = widget.description ?? '';
-    }
     super.initState();
+    if (widget.noteModel != null) {
+      _titleController.text = widget.noteModel?.title ?? '';
+      _descriptionController.text = widget.noteModel?.content ?? '';
+    }
   }
 
   @override
@@ -54,7 +47,14 @@ class _AddNoteState extends State<AddEditNote> {
           IconButton(
             onPressed: () async {
               //Save note action
-              saveNote();
+
+              if (widget.noteModel == null) {
+                await saveNote();
+              } else {
+                await updateNote();
+              }
+              if (!context.mounted) return;
+              Navigator.of(context).pop();
             },
             icon: const Icon(Icons.save_as_outlined),
             color: Colors.white,
@@ -128,10 +128,25 @@ class _AddNoteState extends State<AddEditNote> {
       title: title,
       content: description,
     );
-    final result = await NoteDB().createNote(note);
-    if (result != null) {
-      if (!mounted) return;
+    await NoteDB().createNote(note);
+    // if (result != null) {
+    //   if (!mounted) return;
+    //   Navigator.of(context).pop();
+    // } else {}
+  }
+
+  Future<void> updateNote() async {
+    final title = _titleController.text;
+    final description = _descriptionController.text;
+    if (widget.noteModel!.id == null) {
       Navigator.of(context).pop();
-    } else {}
+      return;
+    }
+    final updateNote = NoteModel.create(
+      id: widget.noteModel?.id,
+      title: title,
+      content: description,
+    );
+    await NoteDB().updateNote(updateNote);
   }
 }
