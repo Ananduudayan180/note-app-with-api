@@ -9,7 +9,7 @@ abstract class ApiCalls {
   Future<NoteModel?> createNote(NoteModel value);
   Future<List<NoteModel>> getAllNote();
   Future<void> updateNote(NoteModel value);
-  // Future<void> deleteNote(String id);
+  Future<void> deleteNote(String id);
 }
 
 class NoteDB implements ApiCalls {
@@ -63,6 +63,12 @@ class NoteDB implements ApiCalls {
   @override
   Future<void> updateNote(NoteModel value) async {
     final response = dio.put(url.updateNote, data: value.toJson());
+    getAllNote();
+  }
+
+  @override
+  Future<void> deleteNote(String id) async {
+    await dio.delete(url.deleteNote.replaceFirst('{id}', id));
     getAllNote();
   }
 }

@@ -71,6 +71,7 @@ class NoteListState extends State<NoteList> {
                     trailing: IconButton(
                       onPressed: () {
                         // Handle delete action
+                        NoteDB().deleteNote(note.id.toString());
                       },
                       icon: Icon(Icons.delete),
                       color: AppColors.appThemeColor,
