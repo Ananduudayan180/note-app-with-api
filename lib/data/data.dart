@@ -62,7 +62,7 @@ class NoteDB implements ApiCalls {
 
   @override
   Future<void> updateNote(NoteModel value) async {
-    final response = dio.put(url.updateNote, data: value.toJson());
+    dio.put(url.updateNote, data: value.toJson());
     getAllNote();
   }
 
